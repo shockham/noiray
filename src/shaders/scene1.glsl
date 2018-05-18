@@ -52,18 +52,6 @@ float terrain(vec3 p) {
     return p.y - (1.0 + sin(p.x)*sin(p.z)) / 2.0;
 }
 
-float union(float d1, float d2) {
-    return min(d1,d2);
-}
-
-float sub(float d1, float d2) {
-    return max(-d1,d2);
-}
-
-float inter(float d1, float d2) {
-    return max(d1,d2);
-}
-
 float smin(float a, float b, float k) {
     float h = clamp( 0.5+0.5*(b-a)/k, 0.0, 1.0 );
     return mix( b, a, h ) - k*h*(1.0-h);
@@ -77,7 +65,7 @@ float scene(vec3 p) {
     vec3 ib_pos = p + vec3(0.0, 0.0, 3.0 * sin(time));
     float u = iter_box(ib_pos, sphere(ib_pos, 1.0));
 
-    u = union(terrain(p - vec3(0.0, -3.0, 0.0)), u);
+    u = min(terrain(p - vec3(0.0, -3.0, 0.0)), u);
 
     return u;
 }
