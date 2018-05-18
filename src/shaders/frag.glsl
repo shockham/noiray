@@ -75,9 +75,6 @@ float scene(vec3 p) {
 
     u = max(-box(p + vec3(0.0, -3.5, 0.0), vec3(2.0, 2.0, 2.0)) + disp(p, 5.0), u);
 
-    /*vec3 ib_pos = p + vec3(0.0, 0.0, 3.0 * sin(time));
-    u = smin(iter_box(ib_pos, sphere(ib_pos, 1.0)), u, 0.2);*/
-
     u = min(terrain(p - vec3(0.0, -3.0, 0.0)), u);
 
     return u;
@@ -196,6 +193,10 @@ vec3 lighting(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
 }
 
 void main() {
+    vec3 cam_pos = cam_pos;
+    cam_pos.y = 1.0;
+    cam_pos.y = terrain(cam_pos);
+
 	vec3 dir = ray_dir(45.0, resolution, v_tex_coords * resolution);
 
     vec3 v_dir = (inverse(modelview_matrix) * vec4(dir, 0.0)).xyz;

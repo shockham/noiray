@@ -183,6 +183,10 @@ vec3 lighting(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
 }
 
 void main() {
+    vec3 cam_pos = cam_pos;
+    cam_pos.y = 1.0;
+    cam_pos.y = terrain(cam_pos);
+
 	vec3 dir = ray_dir(45.0, resolution, v_tex_coords * resolution);
 
     vec3 v_dir = (inverse(modelview_matrix) * vec4(dir, 0.0)).xyz;
