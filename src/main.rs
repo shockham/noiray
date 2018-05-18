@@ -29,7 +29,7 @@ fn main() {
     // crate an instance of the game struct
     let mut game = Game::<DefaultTag>::new();
 
-    load_shaders!(game, "frag");
+    load_shaders!(game, "frag", "scene1");
 
     game.renderer.post_effect.current_shader = "frag";
 
@@ -40,6 +40,14 @@ fn main() {
             |g: &mut Game<DefaultTag>| -> UpdateStatus {
                 // update the first person inputs
                 handle_fp_inputs(&mut g.input, &mut g.cams[0]);
+
+                if g.input.keys_down.contains(&Key::T) {
+                    g.renderer.post_effect.current_shader = "frag";
+                }
+
+                if g.input.keys_down.contains(&Key::Y) {
+                    g.renderer.post_effect.current_shader = "scene1";
+                }
 
                 // quit
                 if g.input.keys_down.contains(&Key::Escape) {
