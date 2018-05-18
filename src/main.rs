@@ -29,9 +29,7 @@ fn main() {
     // crate an instance of the game struct
     let mut game = Game::<DefaultTag>::new();
 
-    {
-        load_shaders!(game, "frag");
-    }
+    load_shaders!(game, "frag");
 
     game.renderer.post_effect.current_shader = "frag";
 
