@@ -3,23 +3,26 @@ extern crate caper;
 use caper::game::*;
 use caper::imgui::Ui;
 use caper::input::Key;
+use caper::shader;
 use caper::types::DefaultTag;
 use caper::utils::handle_fp_inputs;
-use caper::shader;
 
 use std::str;
 
-fn add_frag(game: &mut Game<DefaultTag>, name: &'static str, shader: &'static str) {
-    game.renderer
-        .shaders
-        .add_post_shader(
-            &game.renderer.display,
-            name,
-            shader::post::gl330::VERT,
-            shader,
-        )
-        .unwrap();
-
+macro_rules! load_shaders {
+    ($game:expr, $($s:expr),*) => {
+        $(
+            $game.renderer
+                .shaders
+                .add_post_shader(
+                    &$game.renderer.display,
+                    $s,
+                    shader::post::gl330::VERT,
+                    str::from_utf8(include_bytes!(concat!("shaders/",$s,".glsl"))).unwrap(),
+                )
+                .unwrap();
+        )*
+    }
 }
 
 fn main() {
@@ -27,10 +30,10 @@ fn main() {
     let mut game = Game::<DefaultTag>::new();
 
     {
-        add_frag(&mut game, "scene1", str::from_utf8(include_bytes!("frag.glsl")).unwrap());
+        load_shaders!(game, "frag");
     }
 
-    game.renderer.post_effect.current_shader = "scene1";
+    game.renderer.post_effect.current_shader = "frag";
 
     loop {
         // run the engine update
