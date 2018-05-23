@@ -203,14 +203,14 @@ void main() {
 
     float dist = shortest_dist(cam_pos, v_dir, MIN_DIST, MAX_DIST);
 
-    if (dist > MAX_DIST - EPSILON) {
-        // Didn't hit anything
-        frag_output = vec4(0.0, 0.0, 0.0, 0.0);
-		return;
-    }
-
     // The closest point on the surface to the eyepoint along the view ray
     vec3 p = cam_pos + dist * v_dir;
+
+    if (dist > MAX_DIST - EPSILON) {
+        // Didn't hit anything
+        frag_output = vec4(rand(p.xy + time) * 0.02);
+		return;
+    }
 
     vec3 K_a = vec3(0.2, 0.2, 0.2);
     vec3 K_d = vec3(0.2, 0.2, 0.2);
