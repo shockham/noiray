@@ -177,16 +177,6 @@ vec3 lighting(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
                                   light1Intensity);
     color = mix(color,  color * occ * soft_shadow(p, normalize(light1Pos), 0.02, 5.0, 16.0), 0.5);
 
-    /*vec3 light2Pos = vec3(2.0 * sin(0.37 * time),
-                          2.0 * cos(0.37 * time),
-                          2.0);
-    vec3 light2Intensity = vec3(0.4, 0.4, 0.4);
-
-    color += phong_contrib(k_d, k_s, alpha, p, eye,
-                                  light2Pos,
-                                  light2Intensity);
-    color = mix(color,  color * soft_shadow(p, normalize(light2Pos), 0.02, 5.0, 8.0), 0.5);*/
-
     color = mix(color, vec3(rand(v_tex_coords * time)), 0.1);
 
     return color;
