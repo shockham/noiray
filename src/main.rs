@@ -7,18 +7,20 @@ use caper::shader;
 use caper::types::DefaultTag;
 use caper::utils::handle_fp_inputs;
 
-use std::str;
-
 macro_rules! load_shaders {
     ($game:expr, $($s:expr),*) => {
         $(
+
+
             $game.renderer
                 .shaders
                 .add_post_shader(
                     &$game.renderer.display,
                     $s,
                     shader::post::gl330::VERT,
-                    str::from_utf8(include_bytes!(concat!("shaders/",$s,".glsl"))).unwrap(),
+                    concat!(include_str!("shaders/template.glsl"),
+                            include_str!(concat!("shaders/",$s,".glsl")),
+                            include_str!("shaders/template_end.glsl"))
                 )
                 .unwrap();
         )*
