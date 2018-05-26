@@ -1,19 +1,14 @@
     // end scene body
 }
 
-float shortest_dist(vec3 eye, vec3 marchingDirection, float start, float end) {
+float shortest_dist(vec3 eye, vec3 dir, float start, float end) {
     float depth = start;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++) {
-        float dist = scene(eye + depth * marchingDirection);
-        if (dist < EPSILON) {
-			return depth;
-        }
+        float dist = scene(eye + depth * dir);
+        if (dist < EPSILON || depth >=  end) break;
         depth += dist;
-        if (depth >= end) {
-            return end;
-        }
     }
-    return end;
+    return depth;
 }
 
 vec3 ray_dir(float fieldOfView, vec2 size, vec2 fragCoord) {
