@@ -48,8 +48,33 @@ float iter_box(vec3 p, float init_d) {
    return d;
 }
 
+vec2 hash(vec2 x) {
+    const vec2 k = vec2( 0.3183099, 0.3678794 );
+    x = x*k + k.yx;
+    return -1.0 + 2.0*fract( 16.0 * k*fract( x.x*x.y*(x.x+x.y)) );
+}
+
+float noised(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+
+    vec2 u = f*f*f*(f*(f*6.0-15.0)+10.0);
+
+    vec2 ga = hash(i + vec2(0.0,0.0));
+    vec2 gb = hash(i + vec2(1.0,0.0));
+    vec2 gc = hash(i + vec2(0.0,1.0));
+    vec2 gd = hash(i + vec2(1.0,1.0));
+
+    float va = dot(ga, f - vec2(0.0,0.0));
+    float vb = dot(gb, f - vec2(1.0,0.0));
+    float vc = dot(gc, f - vec2(0.0,1.0));
+    float vd = dot(gd, f - vec2(1.0,1.0));
+
+    return va + u.x*(vb-va) + u.y*(vc-va) + u.x*u.y*(va-vb-vc+vd);
+}
+
 float terrain(vec3 p) {
-    return p.y - (1.0 + sin(p.x)*sin(p.z)) / 2.0;
+    return p.y - noised(p.xz * 0.5);
 }
 
 float smin(float a, float b, float k) {

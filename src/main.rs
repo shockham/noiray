@@ -10,8 +10,6 @@ use caper::utils::handle_fp_inputs;
 macro_rules! load_shaders {
     ($game:expr, $($s:expr),*) => {
         $(
-
-
             $game.renderer
                 .shaders
                 .add_post_shader(
