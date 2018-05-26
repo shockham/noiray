@@ -118,12 +118,7 @@ void main() {
 		return;
     }
 
-    vec3 K_a = vec3(0.2, 0.2, 0.2);
-    vec3 K_d = vec3(0.2, 0.2, 0.2);
-    vec3 K_s = vec3(1.0, 1.0, 1.0);
-    float shininess = 20.0;
-
-    vec3 color = lighting(K_a, K_d, K_s, shininess, p, cam_pos);
+    vec3 color = lighting(vec3(0.2), vec3(0.2), vec3(1.0), 20.0, p, cam_pos);
 
     frag_output = vec4(color, 1.0);
 }
