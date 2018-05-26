@@ -18,11 +18,11 @@ vec3 ray_dir(float fieldOfView, vec2 size, vec2 fragCoord) {
 }
 
 vec3 estimate_normal(vec3 p) {
-    return normalize(vec3(
-        scene(vec3(p.x + EPSILON, p.y, p.z)) - scene(vec3(p.x - EPSILON, p.y, p.z)),
-        scene(vec3(p.x, p.y + EPSILON, p.z)) - scene(vec3(p.x, p.y - EPSILON, p.z)),
-        scene(vec3(p.x, p.y, p.z  + EPSILON)) - scene(vec3(p.x, p.y, p.z - EPSILON))
-    ));
+    vec2 e = vec2(1.0,-1.0)*0.5773*0.0005;
+    return normalize( e.xyy * scene(p + e.xyy) +
+                      e.yyx * scene(p + e.yyx) +
+                      e.yxy * scene(p + e.yxy) +
+                      e.xxx * scene(p + e.xxx) );
 }
 
 vec3 phong_contrib(vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye,
