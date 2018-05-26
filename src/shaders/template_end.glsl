@@ -48,16 +48,16 @@ vec3 phong_contrib(vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye,
     return lightIntensity * (k_d * dotLN + k_s * pow(dotRV, alpha));
 }
 
-float soft_shadow(vec3 ro, vec3 rd, float mint, float maxt, float k ) {
+float softshadow(vec3 eye, vec3 dir, float mint, float tmax ) {
     float res = 1.0;
-    for(float t=mint; t < maxt;) {
-        float h = scene(ro + rd*t);
-        if( h<0.001 )
-            return 0.0;
-        res = min( res, k*h/t );
-        t += h;
+    float t = mint;
+    for(int i = 0; i < 16; i++) {
+        float h = scene(eye + dir * t);
+        res = min(res, 8.0 * h / t);
+        t += clamp(h, 0.02, 0.10);
+        if(h < 0.001 || t > tmax) break;
     }
-    return res;
+    return clamp(res, 0.0, 1.0);
 }
 
 float calc_AO(vec3 pos, vec3 nor) {
@@ -91,7 +91,7 @@ vec3 lighting(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
     color += phong_contrib(k_d, k_s, alpha, p, eye,
                                   light1Pos,
                                   light1Intensity);
-    color = mix(color,  color * occ * soft_shadow(p, normalize(light1Pos), 0.02, 5.0, 16.0), 0.5);
+    color = mix(color,  color * occ * softshadow(p, normalize(light1Pos), 0.02, 5.0), 0.5);
 
     color = mix(color, vec3(rand(v_tex_coords * time)), 0.1);
 
