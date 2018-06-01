@@ -4,6 +4,7 @@ const int MAX_MARCHING_STEPS = 255;
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 100.0;
 const float EPSILON = 0.0001;
+const float PI = 3.1415926;
 
 uniform vec2 resolution;
 uniform vec3 cam_pos;
@@ -84,6 +85,16 @@ float smin(float a, float b, float k) {
 
 float disp(vec3 p, float amt) {
     return sin(amt*p.x)*sin(amt*p.y)*sin(amt*p.z);//*sin(time * 3.0);
+}
+
+mat3 rotateY(float theta) {
+    float c = cos(theta);
+    float s = sin(theta);
+    return mat3(
+        vec3(c, 0, s),
+        vec3(0, 1, 0),
+        vec3(-s, 0, c)
+    );
 }
 
 float scene(vec3 p) {
