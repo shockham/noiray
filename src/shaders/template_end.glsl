@@ -103,7 +103,9 @@ void main() {
     cam_pos.y = 1.0;
     cam_pos.y = terrain(cam_pos);
 
-	vec3 dir = ray_dir(45.0, resolution, v_tex_coords * resolution);
+    vec2 texc = v_tex_coords + sin((v_tex_coords.x + time * 0.05) * 20.0) * 0.01;
+
+	vec3 dir = ray_dir(45.0, resolution, texc * resolution);
 
     vec3 v_dir = (inverse(modelview_matrix) * vec4(dir, 0.0)).xyz;
 
@@ -114,7 +116,7 @@ void main() {
 
     if (dist > MAX_DIST - EPSILON) {
         // Didn't hit anything
-        frag_output = vec4(rand(p.xy + time) * 0.02);
+        frag_output = vec4(0.08 + rand(p.xy + time) * 0.05);
 		return;
     }
 
